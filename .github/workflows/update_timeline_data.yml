@@ -1,0 +1,46 @@
+name: Process and Commit Timelines
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout our repository
+        uses: actions/checkout@v2
+
+      - name: Checkout the third-party repository
+        uses: actions/checkout@v2
+        with:
+          repository: OverlayPlugin/cactbot
+          path: cactbot
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Node.js dependencies
+        run: npm ci
+        working-directory: ./cactbot
+
+      - name: Process timelines
+        run: node --loader=ts-node/esm ../process_timelines.ts
+        working-directory: ./cactbot
+
+      - name: Copy TimelineData to root directory
+        run: cp -r ./cactbot/dist/TimelineData ./TimelineData
+
+      - name: Commit and push changes
+        run: |
+          CACTBOT_COMMIT_HASH=$(git -C ./cactbot rev-parse --short HEAD)
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add ./TimelineData
+          git commit -m "⚡️ CI: Update TimelineData to $CACTBOT_COMMIT_HASH"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
