@@ -30,8 +30,8 @@ jobs:
 
       - name: Copy and execute the processing script
         run: |
-          cp ../process_timelines.ts ./utils/
-          node --loader=ts-node/esm utils/process_timelines.ts
+          cp ../process_timelines.ts ./util/
+          node --loader=ts-node/esm util/process_timelines.ts
         working-directory: ./cactbot
 
       - name: Copy TimelineData to root directory
