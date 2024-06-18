@@ -3,17 +3,17 @@ import path from 'path';
 import process from 'process';
 import * as url from 'url';
 
-import { LooseTriggerSet } from 'cactbot/types/trigger';
-import defaultRaidbossOptions from 'cactbot/ui/raidboss/raidboss_options';
-import { TimelineParser } from 'cactbot/ui/raidboss/timeline_parser';
+import { LooseTriggerSet } from '../types/trigger';
+import defaultRaidbossOptions from '../ui/raidboss/raidboss_options';
+import { TimelineParser } from '../ui/raidboss/timeline_parser';
 
-import { walkDirAsync } from 'cactbot/utils/file_utils';
+import { walkDirAsync } from './file_utils';
 
 const __filename = url.fileURLToPath(new URL('.', import.meta.url));
 const __dirname = path.basename(__filename);
 
-const root = path.join(__dirname, 'cactbot/ui/raidboss/data/');
-const distRoot = path.join(__dirname, 'cactbot/dist/TimelineData/');
+const root = path.join(__dirname, '../ui/raidboss/data/');
+const distRoot = path.join(__dirname, '../dist/TimelineData/');
 
 fs.rmSync(distRoot, { recursive: true, force: true });
 
@@ -23,7 +23,7 @@ const processFile = async (originalFilename: string) => {
   const distFilePath = path.join(distRoot, path.relative(root, originalFilename));
 
   // Copy timeline file if present
-  const importPath = (`cactbot/ui/raidboss/data/${path.relative(root, originalFilename)}`).replace(
+  const importPath = (`../ui/raidboss/data/${path.relative(root, originalFilename)}`).replace(
     '\\',
     '/',
   );

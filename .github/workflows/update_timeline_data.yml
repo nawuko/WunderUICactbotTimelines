@@ -28,8 +28,10 @@ jobs:
         run: npm ci
         working-directory: ./cactbot
 
-      - name: Process timelines
-        run: node --loader=ts-node/esm ../process_timelines.ts
+      - name: Copy and execute the processing script
+        run: |
+          cp ../process_timelines.ts ./utils/
+          node --loader=ts-node/esm utils/process_timelines.ts
         working-directory: ./cactbot
 
       - name: Copy TimelineData to root directory
