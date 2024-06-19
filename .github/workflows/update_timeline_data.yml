@@ -35,7 +35,7 @@ jobs:
         working-directory: ./cactbot
 
       - name: Copy TimelineData to root directory
-        run: cp -r ./cactbot/dist/TimelineData ./TimelineData
+        run: rm -rf ./TimelineData && cp -r ./cactbot/dist/TimelineData ./TimelineData
 
       - name: Commit and push changes
         run: |
