@@ -35,11 +35,12 @@ jobs:
         working-directory: ./cactbot
 
       - name: Copy TimelineData to root directory
-        run: rm -rf ./TimelineData && cp -r ./cactbot/dist/TimelineData ./TimelineData && rm -rf ./cactbot
+        run: rm -rf ./TimelineData && cp -r ./cactbot/dist/TimelineData ./TimelineData
 
       - name: Commit and push changes
         run: |
           CACTBOT_COMMIT_HASH=$(git -C ./cactbot rev-parse --short HEAD)
+          rm -rf ./cactbot
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add ./TimelineData
