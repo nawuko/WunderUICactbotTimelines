@@ -35,7 +35,7 @@ jobs:
         working-directory: ./cactbot
 
       - name: Copy TimelineData to root directory
-        run: rm -rf ./TimelineData && cp -r ./cactbot/dist/TimelineData ./TimelineData
+        run: rm -rf ./TimelineData && cp -r ./cactbot/dist/TimelineData ./TimelineData && rm -rf ./cactbot
 
       - name: Commit and push changes
         run: |
@@ -43,7 +43,11 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add ./TimelineData
-          git commit -m "⚡️ CI: Update TimelineData to $CACTBOT_COMMIT_HASH"
-          git push
+          if git diff-index --quiet HEAD --; then
+            echo "No changes to commit"
+          else
+            git commit -m "⚡️ CI: Update TimelineData to $CACTBOT_COMMIT_HASH"
+            git push
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
